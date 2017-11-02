@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">BixBeGone</string>
+
+    // functionality
+    <string name="desc_flashlight"></string>
+
+    // configuration block
+    <string name="configuration">Configuration</string>
+    <string name="service_enabled">Service Enabled</string>
+    <string name="start_on_boot">Start on Boot</string>
+    <string name="button_action">Button Action</string>
+    <string name="action_prompt">Choose an action</string>
+    <string-array name="action_array">
+        <item>Do Nothing</item>
+        <item>Open App</item>
+        <item>Open Google Assistant</item>
+        <item>Open Camera</item>
+        <item>Open Notification Shade</item>
+        <item>Take Screenshot</item>
+        <item>Toggle Flashlight</item>
+        <item>Toggle Silent/Ring</item>
+        <item>Toggle Silent/Vibrate</item>
+        <item>Toggle Vibrate/Ring</item>
+        <item>Open Power Menu</item>
+        <item>Home Button</item>
+        <item>Recents Menu</item>
+    </string-array>
+
+    // description block
+    <string name="what_does_this_do">What does this do?</string>
+    <string name="service_description">
+        Vivamus rhoncus quam velit, eget efficitur massa ullamcorper at. Aenean velit ex, rhoncus a
+        tristique quis, semper id ante. Nullam molestie nulla a est consequat, vitae eleifend ipsum
+        tristique. Vivamus sit amet fringilla metus, ut lobortis erat. Nunc rhoncus in dolor non
+        pellentesque. Aenean id consectetur elit. Nam eget mattis lectus. Aenean sed volutpat ante,
+        quis viverra risus. Praesent suscipit non felis maximus gravida. Etiam nec ultrices magna.
+    </string>
+</resources>
