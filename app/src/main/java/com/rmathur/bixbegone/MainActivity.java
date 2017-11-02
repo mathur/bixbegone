@@ -10,12 +10,6 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,18 +52,6 @@ public class MainActivity extends AppCompatActivity {
         enableServiceSwitch = (Switch) findViewById(R.id.service_enabled_switch);
         startOnBootSwitch = (Switch) findViewById(R.id.start_on_boot_switch);
         actionSpinner = (Spinner) findViewById(R.id.action_spinner);
-
-        Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.EXPAND_STATUS_BAR
-                ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {/* ... */}
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).check();
 
         // initialize switch state
         enableServiceSwitch.setChecked(false);
