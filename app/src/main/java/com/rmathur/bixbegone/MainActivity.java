@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         actionSpinner.setOnItemSelectedListener(new OnActionSelectedListener());
+        actionSpinner.setSelection(prefHelper.getButtonAction());
     }
 
 
