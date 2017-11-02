@@ -2,7 +2,9 @@
     <string name="app_name">BixBeGone</string>
 
     // functionality
-    <string name="desc_flashlight"></string>
+    <string name="permissions_error_part_1">The following features won\'t work correctly due to permissions being denied: </string>
+    <string name="camera_permission_feature">Camera </string>
+    <string name="camera_permission_error">Error obtaining Camera permissions, please restart app to request again</string>
 
     // configuration block
     <string name="configuration">Configuration</string>

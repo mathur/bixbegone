@@ -65,50 +65,64 @@ public class BixBeGoneService extends Service {
     public void doButtonAction() {
         int action = prefHelper.getButtonAction();
         switch (action) {
-            case 0:
+            case 0: {
                 // do nothing
                 break;
-            case 1:
+            }
+            case 1: {
                 // open app
                 break;
-            case 2:
+            }
+            case 2: {
                 // open google assistant
                 startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
-            case 3:
+            }
+            case 3: {
                 // open camera
                 startActivity(new Intent("android.media.action.IMAGE_CAPTURE"));
                 break;
-            case 4:
+            }
+            case 4: {
                 // open notification shade
                 openNotificationShade();
                 break;
-            case 5:
+            }
+            case 5: {
                 // take screenshot
                 break;
-            case 6:
+            }
+            case 6: {
                 // toggle flashlight
                 break;
-            case 7:
+            }
+            case 7: {
                 // toggle silent/ring
                 break;
-            case 8:
+            }
+            case 8: {
                 // toggle silent/vibrate
                 break;
-            case 9:
+            }
+            case 9: {
                 // toggle vibrate/ring
                 break;
-            case 10:
+            }
+            case 10: {
                 // open power menu
                 break;
-            case 11:
+            }
+            case 11: {
                 // home button
                 break;
-            case 12:
+            }
+            case 12: {
                 // recents button
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
     }
 

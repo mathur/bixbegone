@@ -3,13 +3,25 @@ package com.rmathur.bixbegone;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -113,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
         actionSpinner.setOnItemSelectedListener(new OnActionSelectedListener());
         actionSpinner.setSelection(prefHelper.getButtonAction());
+
+        checkPermissions();
     }
 
 
@@ -124,6 +138,68 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+
+    public void checkPermissions() {
+        if (checkSelfPermission(Manifest.permission.READ_LOGS) != PackageManager.PERMISSION_GRANTED) {
+            // make popup telling user to grant permission via ADB
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("Grant READ_LOGS Permission")
+                    .setMessage(
+                            "Please run the following command on your computer connected to your phone via ADB: \n\n" +
+                            "adb -d shell pm grant com.rmathur.bixbegone android.permission.READ_LOGS \n\n" +
+                                    "The application will not function correctly without this permission.")
+                    .setPositiveButton("I ran this command", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            checkManifestPermissionsIfNeeded();
+                        }
+                    })
+                    .show();
+        } else {
+            checkManifestPermissionsIfNeeded();
+        }
+    }
+
+    public void checkManifestPermissionsIfNeeded() {
+        Dexter.withActivity(MainActivity.this)
+                .withPermissions(
+                        Manifest.permission.CAMERA
+                ).withListener(new MultiplePermissionsListener() {
+            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(!report.areAllPermissionsGranted()) {
+                    handleDeniedPermissions(report);
+                }
+            }
+            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).check();
+    }
+
+    public void handleDeniedPermissions(MultiplePermissionsReport report) {
+        if (checkSelfPermission(Manifest.permission.READ_LOGS) != PackageManager.PERMISSION_GRANTED) {
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.main_layout), "READ_LOGS permission not granted, you must restart the application/service after granting this permission.", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        } else {
+            String errorMsg = getString(R.string.permissions_error_part_1);
+            List<PermissionDeniedResponse> deniedPermissions = report.getDeniedPermissionResponses();
+            for(PermissionDeniedResponse response : deniedPermissions) {
+                switch(response.getPermissionName()) {
+                    case "android.permission.CAMERA": {
+                        errorMsg += getString(R.string.camera_permission_feature);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.main_layout), errorMsg, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
 //    void setBixbyPackageStatus(boolean enabled) {
