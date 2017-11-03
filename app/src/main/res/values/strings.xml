@@ -3,8 +3,20 @@
 
     // functionality
     <string name="permissions_error_part_1">The following features won\'t work correctly due to permissions being denied: </string>
-    <string name="camera_permission_feature">Camera </string>
+    <string name="camera_permission_feature">Launching camera </string>
     <string name="camera_permission_error">Error obtaining Camera permissions, please restart app to request again</string>
+    <string name="notification_permission_feature">Notification panel </string>
+    <string name="notification_permission_error">Error obtaining Notification panel permissions, please restart app to request again</string>
+    <string name="change_ringer_mode_feature">Ringer mode changes </string>
+    <string name="change_ringer_mode_error">Error obtaining ringer mode change permissions, please restart app to request again</string>
+    <string name="read_logs_dialog_title">Grant READ_LOGS Permission</string>
+    <string name="read_logs_dialog_message">
+        Please run the following command on your computer connected to your phone via ADB:
+        \n\n adb -d shell pm grant com.rmathur.bixbegone android.permission.READ_LOGS
+        \n\n The application will not function correctly without this permission.
+    </string>
+    <string name="read_logs_dialog_confirm">I ran this command</string>
+    <string name="read_logs_error">READ_LOGS permission not granted, you must restart the application/service after granting this permission.</string>
 
     // configuration block
     <string name="configuration">Configuration</string>

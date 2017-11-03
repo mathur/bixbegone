@@ -1,7 +1,9 @@
 package com.rmathur.bixbegone;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -14,10 +16,14 @@ import java.lang.reflect.Method;
 public class BixBeGoneService extends Service {
 
     PreferenceHelper prefHelper;
+    AudioManager audioManager;
+    boolean volumeState;
 
     @Override
     public void onCreate() {
         prefHelper = new PreferenceHelper(this.getApplicationContext());
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        volumeState = false;
     }
 
     @Override
@@ -98,14 +104,39 @@ public class BixBeGoneService extends Service {
             }
             case 7: {
                 // toggle silent/ring
+                if(volumeState) {
+                    // set to silent
+                    setVolumeState(0);
+                } else {
+                    // set to ring
+                    setVolumeState(2);
+                }
+                volumeState = !volumeState;
                 break;
             }
             case 8: {
                 // toggle silent/vibrate
+                if(volumeState) {
+                    // set to silent
+                    setVolumeState(0);
+                } else {
+                    // set to vibrate
+                    setVolumeState(1);
+                }
+                volumeState = !volumeState;
                 break;
             }
             case 9: {
                 // toggle vibrate/ring
+                if(volumeState) {
+                    // set to vibrate
+                    setVolumeState(1);
+                } else {
+                    // set to ring
+                    setVolumeState(2);
+
+                }
+                volumeState = !volumeState;
                 break;
             }
             case 10: {
@@ -140,6 +171,25 @@ public class BixBeGoneService extends Service {
             showsb.invoke(sbservice);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setVolumeState(int type) {
+        switch (type) {
+            case 0: {
+                // silent
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
+            }
+            case 1: {
+                // vibrate
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            }
+            case 2: {
+                // ring
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), 0);
+            }
         }
     }
 }

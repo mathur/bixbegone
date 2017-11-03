@@ -10,45 +10,63 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         int action = pos;
         switch (action) {
-            case 1:
+            case 1: {
                 // open app
                 break;
-            case 3:
+            }
+            case 3: {
                 // open camera
                 if(!checkCameraPermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.camera_permission_error));
                     action = 0;
                 }
                 break;
-            case 4:
+            }
+            case 4: {
                 // open notification shade
+                if(!checkNotificationShadePermissions(view)) {
+                    showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.notification_permission_error));
+                    action = 0;
+                }
                 break;
-            case 5:
+            }
+            case 5: {
                 // take screenshot
                 break;
-            case 6:
+            }
+            case 6: {
                 // toggle flashlight
                 break;
-            case 7:
+            }
+            case 7: {
                 // toggle silent/ring
-                break;
-            case 8:
+            }
+            case 8: {
                 // toggle silent/vibrate
-                break;
-            case 9:
+            }
+            case 9: {
                 // toggle vibrate/ring
+                if(!checkRingerModePermissions(view)) {
+                    showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
+                    action = 0;
+                }
                 break;
-            case 10:
+            }
+            case 10: {
                 // open power menu
                 break;
-            case 11:
+            }
+            case 11: {
                 // home button
                 break;
-            case 12:
+            }
+            case 12: {
                 // recents button
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
 
         PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
@@ -72,4 +90,17 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
         return true;
     }
 
+    public boolean checkNotificationShadePermissions(View view) {
+        if (view.getContext().checkSelfPermission(Manifest.permission.EXPAND_STATUS_BAR) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkRingerModePermissions(View view) {
+        if (view.getContext().checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
 }

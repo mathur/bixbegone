@@ -21,7 +21,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -146,12 +145,9 @@ public class MainActivity extends AppCompatActivity {
             // make popup telling user to grant permission via ADB
             AlertDialog.Builder builder;
             builder = new AlertDialog.Builder(this);
-            builder.setTitle("Grant READ_LOGS Permission")
-                    .setMessage(
-                            "Please run the following command on your computer connected to your phone via ADB: \n\n" +
-                            "adb -d shell pm grant com.rmathur.bixbegone android.permission.READ_LOGS \n\n" +
-                                    "The application will not function correctly without this permission.")
-                    .setPositiveButton("I ran this command", new DialogInterface.OnClickListener() {
+            builder.setTitle(getString(R.string.read_logs_dialog_title))
+                    .setMessage(getString(R.string.read_logs_dialog_message))
+                    .setPositiveButton(R.string.read_logs_dialog_confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             checkManifestPermissionsIfNeeded();
                         }
@@ -165,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
     public void checkManifestPermissionsIfNeeded() {
         Dexter.withActivity(MainActivity.this)
                 .withPermissions(
-                        Manifest.permission.CAMERA
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.EXPAND_STATUS_BAR,
+                        Manifest.permission.MODIFY_AUDIO_SETTINGS
                 ).withListener(new MultiplePermissionsListener() {
             @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if(!report.areAllPermissionsGranted()) {
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleDeniedPermissions(MultiplePermissionsReport report) {
         if (checkSelfPermission(Manifest.permission.READ_LOGS) != PackageManager.PERMISSION_GRANTED) {
-            Snackbar snackbar = Snackbar.make(findViewById(R.id.main_layout), "READ_LOGS permission not granted, you must restart the application/service after granting this permission.", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.main_layout), getString(R.string.read_logs_error), Snackbar.LENGTH_LONG);
             snackbar.show();
         } else {
             String errorMsg = getString(R.string.permissions_error_part_1);
@@ -190,6 +188,12 @@ public class MainActivity extends AppCompatActivity {
                     case "android.permission.CAMERA": {
                         errorMsg += getString(R.string.camera_permission_feature);
                         break;
+                    }
+                    case "android.permission.EXPAND_STATUS_BAR": {
+                        errorMsg += getString(R.string.notification_permission_feature);
+                    }
+                    case "android.permission.MODIFY_AUDIO_SETTINGS": {
+                        errorMsg += getString(R.string.change_ringer_mode_feature);
                     }
                     default: {
                         break;
