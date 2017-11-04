@@ -101,14 +101,6 @@ public class BixBeGoneService extends Service {
                 break;
             }
             case 5: {
-                // take screenshot
-                break;
-            }
-            case 6: {
-                // toggle flashlight
-                break;
-            }
-            case 7: {
                 // toggle silent/ring
                 if(volumeState == 0) {
                     // set to silent
@@ -121,7 +113,7 @@ public class BixBeGoneService extends Service {
                 }
                 break;
             }
-            case 8: {
+            case 6: {
                 // toggle silent/vibrate
                 if(volumeState == 0) {
                     // set to silent
@@ -134,7 +126,7 @@ public class BixBeGoneService extends Service {
                 }
                 break;
             }
-            case 9: {
+            case 7: {
                 // toggle vibrate/ring
                 if(volumeState == 0) {
                     // set to vibrate
@@ -148,7 +140,7 @@ public class BixBeGoneService extends Service {
                 }
                 break;
             }
-            case 10: {
+            case 8: {
                 // toggle silent/vibrate/ring
                 if(volumeState == 0) {
                     setVolumeState(1);
@@ -162,14 +154,9 @@ public class BixBeGoneService extends Service {
                 }
                 break;
             }
-            case 11: {
+            case 9: {
                 // home button
                 startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
-                break;
-            }
-            case 12: {
-                // recents button
-
                 break;
             }
             default: {

@@ -34,14 +34,11 @@
         <item>Open Google Assistant</item>
         <item>Open Camera</item>
         <item>Open Notification Shade</item>
-        <item>Take Screenshot</item>
-        <item>Toggle Flashlight</item>
         <item>Toggle Silent/Ring</item>
         <item>Toggle Silent/Vibrate</item>
         <item>Toggle Vibrate/Ring</item>
         <item>Cycle Silent/Vibrate/Ring</item>
         <item>Home Button</item>
-        <item>Recents Menu</item>
     </string-array>
 
     // description block

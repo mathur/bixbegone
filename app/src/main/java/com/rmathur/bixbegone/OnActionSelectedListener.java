@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +23,10 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
         final PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
         int action = pos;
         switch (action) {
+            case 0: {
+                // do nothing
+                break;
+            }
             case 1: {
                 // open app
                 Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
@@ -74,28 +77,20 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
                 break;
             }
             case 5: {
-                // take screenshot
-                break;
-            }
-            case 6: {
-                // toggle flashlight
-                break;
-            }
-            case 7: {
                 // toggle silent/ring
                 if(!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
             }
-            case 8: {
+            case 6: {
                 // toggle silent/vibrate
                 if(!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
             }
-            case 9: {
+            case 7: {
                 // toggle vibrate/ring
                 if(!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
@@ -103,7 +98,7 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
                 }
                 break;
             }
-            case 10: {
+            case 8: {
                 // toggle silent/vibrate/ring
                 if(!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
@@ -111,12 +106,8 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
                 }
                 break;
             }
-            case 11: {
+            case 9: {
                 // home button
-                break;
-            }
-            case 12: {
-                // recents button
                 break;
             }
             default: {
