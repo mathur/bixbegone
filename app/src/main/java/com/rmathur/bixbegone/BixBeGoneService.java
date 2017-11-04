@@ -1,13 +1,11 @@
 package com.rmathur.bixbegone;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.view.KeyEvent;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -102,7 +100,7 @@ public class BixBeGoneService extends Service {
             }
             case 5: {
                 // toggle silent/ring
-                if(volumeState == 0) {
+                if (volumeState == 0) {
                     // set to silent
                     setVolumeState(0);
                     volumeState = 1;
@@ -115,7 +113,7 @@ public class BixBeGoneService extends Service {
             }
             case 6: {
                 // toggle silent/vibrate
-                if(volumeState == 0) {
+                if (volumeState == 0) {
                     // set to silent
                     setVolumeState(0);
                     volumeState = 1;
@@ -128,7 +126,7 @@ public class BixBeGoneService extends Service {
             }
             case 7: {
                 // toggle vibrate/ring
-                if(volumeState == 0) {
+                if (volumeState == 0) {
                     // set to vibrate
                     setVolumeState(1);
                     volumeState = 1;
@@ -142,7 +140,7 @@ public class BixBeGoneService extends Service {
             }
             case 8: {
                 // toggle silent/vibrate/ring
-                if(volumeState == 0) {
+                if (volumeState == 0) {
                     setVolumeState(1);
                     volumeState = 1;
                 } else if (volumeState == 1) {

@@ -20,7 +20,6 @@ import java.util.List;
 
 public class OnActionSelectedListener implements AdapterView.OnItemSelectedListener {
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        final PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
         int action = pos;
         switch (action) {
             case 0: {
@@ -29,40 +28,12 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
             case 1: {
                 // open app
-                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                final List<ResolveInfo> pkgAppsList = view.getContext().getPackageManager().queryIntentActivities( mainIntent, 0);
-                Collections.sort(pkgAppsList, new AppComparator(view.getContext()));
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
-                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View convertView = (View) inflater.inflate(R.layout.app_list, null);
-                alertDialog.setView(convertView);
-                alertDialog.setTitle(view.getContext().getString(R.string.app_list_title));
-                ListView lv = (ListView) convertView.findViewById(R.id.app_list);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ResolveInfo appInfo = pkgAppsList.get(position);
-                        Intent appIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(appInfo.activityInfo.packageName);
-                        prefHelper.saveAppSelection(appIntent);
-                        String appName = (appInfo.loadLabel(view.getContext().getPackageManager())).toString();
-                        Toast.makeText(view.getContext(), appName + " " + view.getContext().getString(R.string.app_selected), Toast.LENGTH_LONG).show();
-                    }
-                });
-                alertDialog.setNeutralButton(view.getContext().getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AppAdapter appAdapter = new AppAdapter(view.getContext(), pkgAppsList);
-                lv.setAdapter(appAdapter);
-                alertDialog.show();
-
+                selectApp(view);
                 break;
             }
             case 3: {
                 // open camera
-                if(!checkCameraPermissions(view)) {
+                if (!checkCameraPermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.camera_permission_error));
                     action = 0;
                 }
@@ -70,7 +41,7 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
             case 4: {
                 // open notification shade
-                if(!checkNotificationShadePermissions(view)) {
+                if (!checkNotificationShadePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.notification_permission_error));
                     action = 0;
                 }
@@ -78,21 +49,21 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
             case 5: {
                 // toggle silent/ring
-                if(!checkRingerModePermissions(view)) {
+                if (!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
             }
             case 6: {
                 // toggle silent/vibrate
-                if(!checkRingerModePermissions(view)) {
+                if (!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
             }
             case 7: {
                 // toggle vibrate/ring
-                if(!checkRingerModePermissions(view)) {
+                if (!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
@@ -100,7 +71,7 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
             case 8: {
                 // toggle silent/vibrate/ring
-                if(!checkRingerModePermissions(view)) {
+                if (!checkRingerModePermissions(view)) {
                     showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
                     action = 0;
                 }
@@ -114,7 +85,7 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
                 break;
             }
         }
-
+        final PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
         prefHelper.setButtonAction(action);
     }
 
@@ -126,6 +97,38 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
     public void showPermissionsErrorSnackbar(View view, String errorMsg) {
         Snackbar snackbar = Snackbar.make(view, errorMsg, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    public void selectApp(View view) {
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> pkgAppsList = view.getContext().getPackageManager().queryIntentActivities(mainIntent, 0);
+        Collections.sort(pkgAppsList, new AppComparator(view.getContext()));
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View convertView = (View) inflater.inflate(R.layout.app_list, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle(view.getContext().getString(R.string.app_list_title));
+        ListView lv = (ListView) convertView.findViewById(R.id.app_list);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ResolveInfo appInfo = pkgAppsList.get(position);
+                Intent appIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(appInfo.activityInfo.packageName);
+                PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
+                prefHelper.saveAppSelection(appIntent);
+                String appName = (appInfo.loadLabel(view.getContext().getPackageManager())).toString();
+                Toast.makeText(view.getContext(), appName + " " + view.getContext().getString(R.string.app_selected), Toast.LENGTH_LONG).show();
+            }
+        });
+        alertDialog.setNeutralButton(view.getContext().getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AppAdapter appAdapter = new AppAdapter(view.getContext(), pkgAppsList);
+        lv.setAdapter(appAdapter);
+        alertDialog.show();
     }
 
     public boolean checkCameraPermissions(View view) {
@@ -148,7 +151,7 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
         }
 
         NotificationManager n = (NotificationManager) view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if(!n.isNotificationPolicyAccessGranted()) {
+        if (!n.isNotificationPolicyAccessGranted()) {
             return false;
         }
 

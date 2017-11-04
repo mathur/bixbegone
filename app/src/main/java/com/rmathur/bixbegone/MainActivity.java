@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         NotificationManager n = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if(!n.isNotificationPolicyAccessGranted()) {
+        if (!n.isNotificationPolicyAccessGranted()) {
             // Ask the user to grant access
             Toast.makeText(getApplicationContext(), getString(R.string.change_ringer_mode_toast), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
@@ -175,12 +175,15 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.EXPAND_STATUS_BAR,
                         Manifest.permission.MODIFY_AUDIO_SETTINGS
                 ).withListener(new MultiplePermissionsListener() {
-            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if(!report.areAllPermissionsGranted()) {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if (!report.areAllPermissionsGranted()) {
                     handleDeniedPermissions(report);
                 }
             }
-            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                 token.continuePermissionRequest();
             }
         }).check();
@@ -193,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             String errorMsg = getString(R.string.permissions_error_part_1);
             List<PermissionDeniedResponse> deniedPermissions = report.getDeniedPermissionResponses();
-            for(PermissionDeniedResponse response : deniedPermissions) {
-                switch(response.getPermissionName()) {
+            for (PermissionDeniedResponse response : deniedPermissions) {
+                switch (response.getPermissionName()) {
                     case "android.permission.CAMERA": {
                         errorMsg += getString(R.string.camera_permission_feature);
                         break;

@@ -8,15 +8,14 @@ import java.net.URISyntaxException;
 
 public class PreferenceHelper {
 
-    // global instance of shared preferences
-    public SharedPreferences preferences;
-
     // constants
     final String SHARED_PREF_NAME = "general_prefs";
     final String SERVICE_ENABLED_PREF = "service_enabled";
     final String START_ON_BOOT_PREF = "start_on_boot";
     final String BUTTON_ACTION_PREF = "button_action";
     final String APP_INTENT_PREF = "app_intent";
+    // global instance of shared preferences
+    public SharedPreferences preferences;
 
     public PreferenceHelper(Context context) {
         preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -58,6 +57,10 @@ public class PreferenceHelper {
 
     public Intent getAppSelection() {
         String uri = preferences.getString(APP_INTENT_PREF, "");
+        if (uri == "") {
+            return null;
+        }
+
         Intent intent = null;
         try {
             intent = Intent.getIntent(uri);
