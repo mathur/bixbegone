@@ -17,13 +17,13 @@ public class BixBeGoneService extends Service {
 
     PreferenceHelper prefHelper;
     AudioManager audioManager;
-    boolean volumeState;
+    int volumeState;
 
     @Override
     public void onCreate() {
         prefHelper = new PreferenceHelper(this.getApplicationContext());
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        volumeState = false;
+        volumeState = 0;
     }
 
     @Override
@@ -104,47 +104,61 @@ public class BixBeGoneService extends Service {
             }
             case 7: {
                 // toggle silent/ring
-                if(volumeState) {
+                if(volumeState == 0) {
                     // set to silent
                     setVolumeState(0);
+                    volumeState = 1;
                 } else {
                     // set to ring
                     setVolumeState(2);
+                    volumeState = 0;
                 }
-                volumeState = !volumeState;
                 break;
             }
             case 8: {
                 // toggle silent/vibrate
-                if(volumeState) {
+                if(volumeState == 0) {
                     // set to silent
                     setVolumeState(0);
+                    volumeState = 1;
                 } else {
                     // set to vibrate
                     setVolumeState(1);
+                    volumeState = 0;
                 }
-                volumeState = !volumeState;
                 break;
             }
             case 9: {
                 // toggle vibrate/ring
-                if(volumeState) {
+                if(volumeState == 0) {
                     // set to vibrate
                     setVolumeState(1);
+                    volumeState = 1;
                 } else {
                     // set to ring
                     setVolumeState(2);
+                    volumeState = 0;
 
                 }
-                volumeState = !volumeState;
                 break;
             }
             case 10: {
-                // open power menu
+                // toggle silent/vibrate/ring
+                if(volumeState == 0) {
+                    setVolumeState(1);
+                    volumeState = 1;
+                } else if (volumeState == 1) {
+                    setVolumeState(2);
+                    volumeState = 2;
+                } else {
+                    setVolumeState(0);
+                    volumeState = 0;
+                }
                 break;
             }
             case 11: {
                 // home button
+                startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 break;
             }
             case 12: {
@@ -180,15 +194,21 @@ public class BixBeGoneService extends Service {
                 // silent
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
+                break;
             }
             case 1: {
                 // vibrate
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                break;
             }
             case 2: {
                 // ring
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), 0);
+                break;
+            }
+            default: {
+                break;
             }
         }
     }

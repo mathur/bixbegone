@@ -2,6 +2,7 @@ package com.rmathur.bixbegone;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -155,6 +157,14 @@ public class MainActivity extends AppCompatActivity {
                     .show();
         } else {
             checkManifestPermissionsIfNeeded();
+        }
+
+        NotificationManager n = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if(!n.isNotificationPolicyAccessGranted()) {
+            // Ask the user to grant access
+            Toast.makeText(getApplicationContext(), getString(R.string.change_ringer_mode_toast), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            MainActivity.this.startActivityForResult(intent, -1);
         }
     }
 

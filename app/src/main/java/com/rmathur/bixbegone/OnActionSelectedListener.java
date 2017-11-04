@@ -1,6 +1,9 @@
 package com.rmathur.bixbegone;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -40,9 +43,17 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
             case 7: {
                 // toggle silent/ring
+                if(!checkRingerModePermissions(view)) {
+                    showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
+                    action = 0;
+                }
             }
             case 8: {
                 // toggle silent/vibrate
+                if(!checkRingerModePermissions(view)) {
+                    showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
+                    action = 0;
+                }
             }
             case 9: {
                 // toggle vibrate/ring
@@ -53,7 +64,11 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
                 break;
             }
             case 10: {
-                // open power menu
+                // toggle silent/vibrate/ring
+                if(!checkRingerModePermissions(view)) {
+                    showPermissionsErrorSnackbar(view, view.getContext().getString(R.string.change_ringer_mode_error));
+                    action = 0;
+                }
                 break;
             }
             case 11: {
@@ -101,6 +116,12 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
         if (view.getContext().checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
+
+        NotificationManager n = (NotificationManager) view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if(!n.isNotificationPolicyAccessGranted()) {
+            return false;
+        }
+
         return true;
     }
 }
