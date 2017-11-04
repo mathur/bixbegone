@@ -1,20 +1,53 @@
 package com.rmathur.bixbegone;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.util.List;
 
 public class OnActionSelectedListener implements AdapterView.OnItemSelectedListener {
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        final PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
         int action = pos;
         switch (action) {
             case 1: {
                 // open app
+                Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                final List<ResolveInfo> pkgAppsList = view.getContext().getPackageManager().queryIntentActivities( mainIntent, 0);
+                for(ResolveInfo info : pkgAppsList) {
+                    System.out.println();
+                    System.out.println();
+                }
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View convertView = (View) inflater.inflate(R.layout.app_list, null);
+                alertDialog.setView(convertView);
+                alertDialog.setTitle("App List");
+                ListView lv = (ListView) convertView.findViewById(R.id.app_list);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ResolveInfo appInfo = pkgAppsList.get(position);
+                        Intent appIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(appInfo.activityInfo.packageName);
+                        prefHelper.saveAppSelection(appIntent);
+                    }
+                });
+                AppAdapter appAdapter = new AppAdapter(view.getContext(), pkgAppsList);
+                lv.setAdapter(appAdapter);
+                alertDialog.show();
+
                 break;
             }
             case 3: {
@@ -84,7 +117,6 @@ public class OnActionSelectedListener implements AdapterView.OnItemSelectedListe
             }
         }
 
-        PreferenceHelper prefHelper = new PreferenceHelper(view.getContext());
         prefHelper.setButtonAction(action);
     }
 

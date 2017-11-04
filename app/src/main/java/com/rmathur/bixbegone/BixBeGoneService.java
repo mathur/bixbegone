@@ -1,11 +1,13 @@
 package com.rmathur.bixbegone;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.view.KeyEvent;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -77,6 +79,10 @@ public class BixBeGoneService extends Service {
             }
             case 1: {
                 // open app
+                Intent intent = prefHelper.getAppSelection();
+                if (intent != null) {
+                    startActivity(intent);
+                }
                 break;
             }
             case 2: {
@@ -163,6 +169,7 @@ public class BixBeGoneService extends Service {
             }
             case 12: {
                 // recents button
+
                 break;
             }
             default: {
