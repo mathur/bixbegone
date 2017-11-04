@@ -34,6 +34,7 @@ public class BixBeGoneService extends Service {
                 int counter = 0;
                 while (true) {
                     try {
+                        Runtime.getRuntime().exec("logcat -c");
                         Process process = Runtime.getRuntime().exec("logcat ActivityManager:W");
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String line;
@@ -65,7 +66,11 @@ public class BixBeGoneService extends Service {
 
     @Override
     public void onDestroy() {
-        // nothing
+        try {
+            Runtime.getRuntime().exec("logcat -c");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void doButtonAction() {
