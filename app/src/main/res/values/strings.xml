@@ -18,6 +18,9 @@
     </string>
     <string name="read_logs_dialog_confirm">I ran this command</string>
     <string name="read_logs_error">READ_LOGS permission not granted, you must restart the application/service after granting this permission.</string>
+    <string name="app_list_title">App List</string>
+    <string name="app_selected">selected to launch on Bixby button press</string>
+    <string name="ok_action">OK</string>
 
     // configuration block
     <string name="configuration">Configuration</string>
