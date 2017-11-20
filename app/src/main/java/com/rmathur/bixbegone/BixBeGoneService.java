@@ -17,13 +17,11 @@ public class BixBeGoneService extends Service {
 
     PreferenceHelper prefHelper;
     AudioManager audioManager;
-    int volumeState;
 
     @Override
     public void onCreate() {
         prefHelper = new PreferenceHelper(this.getApplicationContext());
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        volumeState = 0;
     }
 
     @Override
@@ -105,55 +103,45 @@ public class BixBeGoneService extends Service {
             }
             case 5: {
                 // toggle silent/ring
-                if (volumeState == 0) {
-                    // set to silent
-                    setVolumeState(0);
-                    volumeState = 1;
-                } else {
-                    // set to ring
+                if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
                     setVolumeState(2);
-                    volumeState = 0;
+                } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                    setVolumeState(0);
+                }  else {
+                    setVolumeState(0);
                 }
                 break;
             }
             case 6: {
                 // toggle silent/vibrate
-                if (volumeState == 0) {
-                    // set to silent
-                    setVolumeState(0);
-                    volumeState = 1;
-                } else {
-                    // set to vibrate
+                if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
                     setVolumeState(1);
-                    volumeState = 0;
+                } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                    setVolumeState(0);
+                }  else {
+                    setVolumeState(0);
                 }
                 break;
             }
             case 7: {
                 // toggle vibrate/ring
-                if (volumeState == 0) {
-                    // set to vibrate
-                    setVolumeState(1);
-                    volumeState = 1;
-                } else {
-                    // set to ring
+                if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     setVolumeState(2);
-                    volumeState = 0;
-
+                } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                    setVolumeState(1);
+                }  else {
+                    setVolumeState(1);
                 }
                 break;
             }
             case 8: {
                 // toggle silent/vibrate/ring
-                if (volumeState == 0) {
+                if(audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
                     setVolumeState(1);
-                    volumeState = 1;
-                } else if (volumeState == 1) {
+                } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     setVolumeState(2);
-                    volumeState = 2;
-                } else {
+                }  else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                     setVolumeState(0);
-                    volumeState = 0;
                 }
                 break;
             }
