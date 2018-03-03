@@ -30,4 +30,5 @@ dependencies {
     implementation files('libs/edm.jar')
     implementation files('libs/license.jar')
     implementation 'com.karumi:dexter:4.2.0'
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
 }

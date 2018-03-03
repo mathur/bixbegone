@@ -12,6 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class BixBeGoneService extends Service {
 
@@ -29,7 +33,8 @@ public class BixBeGoneService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int counter = 0;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.SSS");
+                Date oldDate = null;
                 while (true) {
                     try {
                         Runtime.getRuntime().exec("logcat -c");
@@ -38,10 +43,24 @@ public class BixBeGoneService extends Service {
                         String line;
                         while ((line = bufferedReader.readLine()) != null) {
                             if (line.contains("com.samsung.android.bixby.WinkService")) {
-                                counter++;
-                                if (counter % 2 == 0 && counter != 0) {
-                                    doButtonAction();
+                                String timestamp = line.split("\\s+")[1];
+                                Date parsedDate;
+                                try {
+                                    parsedDate = dateFormat.parse(timestamp);
+                                } catch (ParseException e) {
+                                    parsedDate = null;
+                                    e.printStackTrace();
                                 }
+
+                                if (oldDate != null) {
+                                    long numSecondDiff = getDateDiff(oldDate, parsedDate, TimeUnit.MILLISECONDS);
+                                    if (numSecondDiff > 500) {
+                                        doButtonAction();
+                                    }
+
+                                }
+
+                                oldDate = parsedDate;
                             }
                         }
                     } catch (FileNotFoundException e) {
@@ -196,5 +215,10 @@ public class BixBeGoneService extends Service {
                 break;
             }
         }
+    }
+
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 }
